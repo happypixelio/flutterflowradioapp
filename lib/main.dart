@@ -1,58 +1,55 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'flutter_flow/flutter_flow_theme.dart';
+import 'flutter_flow/flutter_flow_util.dart';
+import 'flutter_flow/internationalization.dart';
+import 'index.dart';
 
-void main(List<String> args) {
-  runApp(MaterialApp(
-    home: MyApp(),
-    title:'Radio',
-    debugShowCheckedModeBanner: false,
-  ));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await FlutterFlowTheme.initialize();
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
-
+  // This widget is the root of your application.
   @override
   State<MyApp> createState() => _MyAppState();
+
+  static _MyAppState of(BuildContext context) =>
+      context.findAncestorStateOfType<_MyAppState>()!;
 }
 
 class _MyAppState extends State<MyApp> {
+  Locale? _locale;
+  ThemeMode _themeMode = FlutterFlowTheme.themeMode;
+
+  void setLocale(String language) =>
+      setState(() => _locale = createLocale(language));
+  void setThemeMode(ThemeMode mode) => setState(() {
+        _themeMode = mode;
+        FlutterFlowTheme.saveThemeMode(mode);
+      });
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Column(
-        mainAxisAlignment:MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment:MainAxisAlignment.center,
-            children: [
-              Container(
-                height: 200,
-                width: 200,
-                child: Image.asset('assets/logo.png',color: Colors.white,),
-              ),
-            ],
-          ),
-          SizedBox(height: 200,),
-          Container(
-            height: 50,
-            width: 250,
-            decoration: BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.circular(100)
-            ),
-            child: Center(
-              child: Text('Start',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-                fontWeight: FontWeight.bold
-              ),
-              ),
-            ),
-          )
-        ],
-      ),
+    return MaterialApp(
+      title: 'UniqueVibez App',
+      localizationsDelegates: [
+        FFLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      locale: _locale,
+      supportedLocales: const [Locale('en', '')],
+      theme: ThemeData(brightness: Brightness.light),
+      darkTheme: ThemeData(brightness: Brightness.dark),
+      themeMode: _themeMode,
+      home: UVLandingPageWidget(),
     );
   }
 }
